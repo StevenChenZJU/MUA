@@ -1,35 +1,33 @@
 public enum Operation {
-    SELF(0, new ArgType[]{}), // return itself as a value
-    MAKE(2, new ArgType[]{
+    SELF(new ArgType[]{}), // return itself as a value
+    MAKE(new ArgType[]{
         ArgType.WORD, ArgType.VALUE
     }),
-    THING(1, new ArgType[]{
-        ArgType.NAME
+    THING(new ArgType[]{
+        ArgType.WORD
     }),
-    PRINT(1, new ArgType[]{
+    PRINT(new ArgType[]{
         ArgType.VALUE
     }),
-    READ(0, new ArgType[]{}),
-    ADD(2, new ArgType[]{
+    READ(new ArgType[]{}),
+    ADD(new ArgType[]{
         ArgType.NUMBER, ArgType.NUMBER
 	}),
-    SUB(2, new ArgType[]{
+    SUB(new ArgType[]{
         ArgType.NUMBER, ArgType.NUMBER
 	}),
-    MUL(2, new ArgType[]{
+    MUL(new ArgType[]{
         ArgType.NUMBER, ArgType.NUMBER
 	}),
-    DIV(2, new ArgType[]{
+    DIV(new ArgType[]{
         ArgType.NUMBER, ArgType.NUMBER
 	}),
-    MOD(2, new ArgType[]{
+    MOD(new ArgType[]{
         ArgType.NUMBER, ArgType.NUMBER
 	});
 
-    private final int argNumber;
     private final ArgType[] argTypes;
-    Operation(int argNumber, ArgType[] argTypes) {
-        this.argNumber = argNumber;
+    Operation(ArgType[] argTypes) {
         this.argTypes = argTypes;
     }
     ArgType[] getArgsType() {
