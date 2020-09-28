@@ -3,41 +3,44 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MUAInterpreter {
-    private static Map<String, Operation> OpMap
+    private static Map<String, Operation> opMap
     = Map.of(
-    "make", Operation.MAKE,
-    "thing", Operation.THING,
-    "print", Operation.PRINT,
-    "read", Operation.READ,
-    "add", Operation.ADD,
-    "sub", Operation.SUB,
-    "mul", Operation.MUL,
-    "div", Operation.DIV,
-    "mod", Operation.MOD
+    "make",     Operation.MAKE,
+    "thing",    Operation.THING,
+    "print",    Operation.PRINT,
+    "read",     Operation.READ,
+    "add",      Operation.ADD,
+    "sub",      Operation.SUB,
+    "mul",      Operation.MUL,
+    "div",      Operation.DIV,
+    "mod",      Operation.MOD
     );
     private static Pattern numberPattern = Pattern.compile("-?\\d+\\.?\\d*");
     private static Pattern listPattern = Pattern.compile("\\[\\s*\\w+");
     private static Pattern wordPattern = Pattern.compile("\"\\w+");
-    private static Pattern thingPattern = Pattern.compile(":\\w+");
+    private static Pattern commaPattern = Pattern.compile(":\\w+");
     private static Pattern namePattern = Pattern.compile("[a-zA-Z]\\w*");
     private static Pattern boolPattern = Pattern.compile("true|false");
     private Scanner in = new Scanner("");
     public MUAInterpreter (Scanner in) {
         this.in = in;
     }
-    public Operation nextOperation() {
-        if (in.hasNext(thingPattern)) {
-            while(String.valueOf(in.nextByte()).isEmpty())
-                continue; // read space till reading the ":"
-            return Operation.THING;
-        } else {
-            String token = in.next();
-            if (OpMap.get(token) != null) {
-                return OpMap.get(token);
-            } else {
-                return Operation.SELF;
-            }
-        }
+    public String nextToken () {
+        return in.next();
+    }
+    public Operation interpretOperation (String token) {
+        // 1. if it is inner operation, return type(see Operation class)
+        // 2. if it has number/bool/list/word pattern, return Operation.VALUE
+        // 3. otherwise, check whether it can be a name, if yes, return Operation.NAME
+        Operation op = Operation.UNKNOWN;
+        if (opMap.containsKey(token)) {
+            op = opMap.get(token);
+        } else if(isValueLiteral(token)) {
+            op = Operation.VALUE;
+        } else if(namePattern.matcher(token).matches()){
+            op = Operation.NAME;
+        } // else UNKNOWN
+        return op;
     }   
     public Value nextValue() {
         Value result = null;
@@ -51,7 +54,19 @@ public class MUAInterpreter {
             result = nextBool();
         } else {
             // reading an operation
-            result = MUAExecutor.execute(this);
+            
+        }
+        return result;
+    }
+    public Name nextName() {
+        Name result = null;
+        String token = in.next();
+        // BUG: only check whether the name is in namespace
+        // let executor do the checking
+        if (namePattern.matcher(token).matches()) {
+            result = Name.newInstance(token);
+        } else {
+            // throw exception for no such name
         }
         return result;
     }
@@ -59,15 +74,10 @@ public class MUAInterpreter {
         Word result = null;
         String token = in.next();
         if (wordPattern.matcher(token).matches()) {
-            result = Word.newInstance(token);
+            // remove the first \"
+            result = Word.newInstance(token.substring(1));
         } else {
-            Value temp = MUAExecutor.execute(this);
-            if (temp.isWord()) {
-                result = (Word) temp;
-            }
-            else {
-
-            }
+            
 
         }
         return result;
@@ -91,13 +101,7 @@ public class MUAInterpreter {
             result = List.newInstance
                     (content.substring(1, content.length()-1));
         } else {
-            Value temp = MUAExecutor.execute(this);
-            if (temp.isList()) {
-                result = (List) temp;
-            }
-            else {
-
-            }
+            
         }
         return result;
     }
@@ -107,13 +111,7 @@ public class MUAInterpreter {
         if (numberPattern.matcher(token).matches()) {
             result = Number.newInstance(token);
         } else {
-            Value temp = MUAExecutor.execute(this);
-            if (temp.isNumber()) {
-                result = (Number) temp;
-            }
-            else {
-
-            }
+            
         }
         return result;
     }
@@ -123,14 +121,14 @@ public class MUAInterpreter {
         if (boolPattern.matcher(token).matches()) {
             result = Bool.newInstance(token);
         } else {
-            Value temp = MUAExecutor.execute(this);
-            if (temp.isBool()) {
-                result = (Bool) temp;
-            }
-            else {
-
-            }
+            
         }
         return result;
+    }
+    private boolean isValueLiteral (String input) {
+        return  listPattern.matcher(input).matches()
+            ||  wordPattern.matcher(input).matches()
+            ||  numberPattern.matcher(input).matches()
+            ||  boolPattern.matcher(input).matches();
     }
 }

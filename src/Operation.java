@@ -1,11 +1,14 @@
 public enum Operation {
-    SELF(new ArgType[]{}), // return itself as a value
+    UNKNOWN(new ArgType[]{}), // ERROR TYPE
+    VALUE(new ArgType[]{}), // VALUE TYPE -- return value
+    NAME(new ArgType[]{}), // NAME TYPE -- interpreted as possible name
     MAKE(new ArgType[]{
         ArgType.WORD, ArgType.VALUE
     }),
     THING(new ArgType[]{
-        ArgType.WORD
+        ArgType.WORD // should be name, but name is a special word
     }),
+    COMMA(new ArgType[]{}),
     PRINT(new ArgType[]{
         ArgType.VALUE
     }),
@@ -30,7 +33,9 @@ public enum Operation {
     Operation(ArgType[] argTypes) {
         this.argTypes = argTypes;
     }
-    ArgType[] getArgsType() {
+
+    public ArgType[] getArgsType() {
         return argTypes;
     }
+
 }

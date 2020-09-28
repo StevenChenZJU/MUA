@@ -1,3 +1,3 @@
 public enum ArgType {
-    WORD, NUMBER, LIST, BOOL, VALUE;
+    WORD, NUMBER, LIST, BOOL, VALUE, NAME;
 }

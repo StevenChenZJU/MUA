@@ -7,7 +7,11 @@ public class Word extends Value {
         super(content);
     }
     static public Word newInstance(String content) {
-        return new Word(content);
+        if(!content.isEmpty() && content.charAt(0) == '\"')
+            return new Word(content);
+        else 
+            // remove the \"
+            return new Word(content.substring(1));
     }
     @Override
     public boolean isWord() {
