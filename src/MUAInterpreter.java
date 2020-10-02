@@ -1,15 +1,11 @@
-import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MUAInterpreter {
-    private static Pattern numberPattern = Pattern.compile("-?\\d+\\.?\\d*");
     private static Pattern listPattern = Pattern.compile("\\[\\s*.+");
     private static Pattern exprPattern = Pattern.compile("\\(\\s*.+");
-    private static Pattern wordPattern = Pattern.compile("\".+");
-    private static Pattern commaPattern = Pattern.compile(":\\.+");
-    private static Pattern namePattern = Pattern.compile("[a-zA-Z]\\[a-zA-Z0-9_]*");
-    private static Pattern boolPattern = Pattern.compile("true|false");
+    
+    
     private Scanner in = new Scanner("");
     public MUAInterpreter (Scanner in) {
         this.in = in;
@@ -62,28 +58,7 @@ public class MUAInterpreter {
         }
         return result;
     }
-    public Operation interpretOperation (String token) {
-        // 1. if it is inner operation, return type(see Operation class)
-        // 2. if it has number/bool/list/word pattern, return Operation.VALUE
-        // 3. otherwise, check whether it can be a name, if yes, return Operation.NAME
-        Operation op = Operation.UNKNOWN;
-        if (Operation.opMap.containsKey(token)) {
-            op = Operation.opMap.get(token);
-        } else if(commaPattern.matcher(token).matches()) {
 
-        } else if(isValueLiteral(token)) {
-            op = Operation.VALUE;
-        } else if(namePattern.matcher(token).matches()){
-            op = Operation.NAME;
-        } // else UNKNOWN
-        return op;
-    }   
-    private boolean isValueLiteral (String input) {
-        return  listPattern.matcher(input).matches()
-            ||  wordPattern.matcher(input).matches()
-            ||  numberPattern.matcher(input).matches()
-            ||  boolPattern.matcher(input).matches();
-    }
 
     // Unit Test 
     public static void main (String[] args) {

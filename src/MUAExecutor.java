@@ -10,7 +10,7 @@ public class MUAExecutor {
         // 1. if it is inner operation, return type(see Operation class)
         // 2. if it has number/bool/list/word pattern, return Operation.VALUE
         // 3. otherwise, check whether it can be a name, if yes, return Operation.NAME
-        Operation op = in.interpretOperation(token);
+        Operation op = Operation.getOperation(token);
         // then Executor apply the operation:
         // (1) if an inner operation, first get parameter by:
         //      1. read token, execute it and get returned value
@@ -26,27 +26,25 @@ public class MUAExecutor {
         //      2. if in namespace and it binds a value other than list
         //          **or not in the namespace at all**
         //          then ** return it as a word**
-        value = apply(op, token);
+        Value[] args = eval(op, in);
+        value = apply(op, token, args);
         return value;
     }
-
-    private Value apply (Operation op, String token) {
-        Value value = null;
-        switch (op) {
-            case UNKNOWN: break; // ERROR TYPE
-            case VALUE: break; // VALUE TYPE -- return value
-            case NAME: break; // NAME TYPE -- interpreted as possible name
-            case MAKE: break;
-            case THING: break;
-            case COMMA: break;
-            case PRINT: break;
-            case READ: break;
-            case ADD: break;
-            case SUB: break;
-            case MUL: break;
-            case DIV: break;
-            case MOD: break;
+    private Value[] 
+    eval(Operation op, MUAInterpreter in) {
+        int argNum = op.getArgNum();
+        Value[] result = new Value[argNum];
+        String token;
+        Value value;
+        for (int i = 0; i < argNum; i++) {
+            token = in.nextToken();
+            value = execute(token, in);
+            result[i] = value;
         }
-        return value;
+        return result;
+    }
+    private Value 
+    apply (Operation op, String token, Value[] args) {
+        return op.exec(token, args);
     }
 }
