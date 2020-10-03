@@ -148,7 +148,7 @@ public enum Operation {
         } // else UNKNOWN
         return op;
     }
-    public static Pattern commaPattern = Pattern.compile(":\\.+");
+    public static Pattern commaPattern = Pattern.compile(":.+");
     public static Pattern namePattern = Pattern.compile("[a-zA-Z]\\[a-zA-Z0-9_]*");
     public static Map<String, Operation> opMap
     = Map.of(
