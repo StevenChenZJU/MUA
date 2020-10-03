@@ -3,7 +3,8 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class Environment {
-    private static HashMap<String, Value> global;
+    private static HashMap<String, Value> global
+     = new HashMap<String, Value>();
     private static Stack<HashMap<String, Value>> localStack 
      = new Stack<HashMap<String, Value>>();
     public static Scanner stdin = new Scanner(System.in);
