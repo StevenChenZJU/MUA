@@ -63,23 +63,36 @@ public class Number implements Value {
      * Methods Particular to Number
      */
     public Number add(Number n) {
-        //TODO
-        return null;        
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        Double result = left + right;
+        return Number.newInstance(result);        
     }
     public Number sub(Number n) {
-        //TODO
-        return null;        
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        Double result = left - right;
+        return Number.newInstance(result);        
     }
     public Number mul(Number n) {
-        //TODO
-        return null;        
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        Double result = left * right;
+        return Number.newInstance(result);
     }
     public Number div(Number n) {
-        //TODO
-        return null;        
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        Double result = left / right;
+        return Number.newInstance(result);
     }
     public Number mod(Number n) {
-        //TODO
-        return null;            
+        // round to Integer before moding
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        long longLeft = Math.round(left);
+        long longRight = Math.round(right);
+        Double result = (double) (longLeft % longRight);
+        return Number.newInstance(result);            
     }
 }

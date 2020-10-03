@@ -4,8 +4,7 @@ import java.util.regex.Pattern;
 public class MUAInterpreter {
     private static Pattern listPattern = Pattern.compile("\\[\\s*.+");
     private static Pattern exprPattern = Pattern.compile("\\(\\s*.+");
-    
-    
+
     private Scanner in = new Scanner("");
     public MUAInterpreter (Scanner in) {
         this.in = in;

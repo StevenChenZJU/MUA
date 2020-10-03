@@ -1,70 +1,122 @@
 import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public enum Operation {
+    // ERROR TYPE
     UNKNOWN(0){
-		Value exec(String token, Value[] args){
+		Value exec(String operator, Value[] args){
 			return null;
 		}
-	}, // ERROR TYPE
+    }, 
+    // VALUE -- return value
     VALUE(0){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+			return Value.valueOf(operator);
 		}
-	}, // VALUE TYPE -- return value
+    }, 
+    // NAME -- interpreted as possible name
     NAME(0){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Value value = Environment.getValue(operator);
+			if (value != null && value.isList()) {
+                // Execute the Function binded with the name
+                Scanner scanner = new Scanner(value.getContent());
+                MUAInterpreter in = new MUAInterpreter(scanner);
+                //TODO: function call
+                return null;
+            } else {
+                return null;
+            }
 		}
-	}, // NAME TYPE -- interpreted as possible name
+    }, 
+    // MAKE -- 
     MAKE(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            String name = args[0].getContent();
+            Value value = args[1];
+            Environment.binding(name, value);
+            return value;
 		}
 	},
     THING(1){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            String name = args[0].getContent();
+            return Environment.getValue(name);
 		}
 	},
     COMMA(0){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            String name = operator.substring(1);
+            return Environment.getValue(name);
 		}
 	},
     PRINT(1){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Value value = args[0];
+            System.out.println(value);
+            return value;
 		}
 	},
     READ(0){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            String token = Environment.stdin.next();
+            return Value.valueOf(token);
 		}
 	},
     ADD(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Number left = args[0].getNumber();
+            Number right = args[1].getNumber();
+            if (left != null && right != null) {
+                return left.add(right);
+            } else {
+                return null;
+            }
 		}
 	},
     SUB(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Number left = args[0].getNumber();
+            Number right = args[1].getNumber();
+            if (left != null && right != null) {
+                return left.sub(right);
+            } else {
+                return null;
+            }
 		}
 	},
     MUL(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Number left = args[0].getNumber();
+            Number right = args[1].getNumber();
+            if (left != null && right != null) {
+                return left.mul(right);
+            } else {
+                return null;
+            }
 		}
 	},
     DIV(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Number left = args[0].getNumber();
+            Number right = args[1].getNumber();
+            if (left != null && right != null) {
+                return left.div(right);
+            } else {
+                return null;
+            }
 		}
 	},
     MOD(2){
-		Value exec(String token, Value[] args){
-			return null;
+		Value exec(String operator, Value[] args){
+            Number left = args[0].getNumber();
+            Number right = args[1].getNumber();
+            if (left != null && right != null) {
+                return left.mod(right);
+            } else {
+                return null;
+            }
 		}
 	};
     
@@ -76,7 +128,7 @@ public enum Operation {
     public int getArgNum() {
         return argNum;
     }
-    abstract Value exec(String token, Value[] args);
+    abstract Value exec(String operator, Value[] args);
     /**
      * Static Functions and Variables
      */
