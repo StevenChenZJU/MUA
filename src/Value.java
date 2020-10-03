@@ -1,6 +1,6 @@
 import java.util.regex.Pattern;
 
-interface Value {    
+public interface Value {    
     public static Pattern numberPattern = Pattern.compile("-?\\d+\\.?\\d*");
     public static Pattern wordPattern = Pattern.compile("\".+");
     public static Pattern listPattern = Pattern.compile("\\[\\s*.+");
