@@ -80,6 +80,6 @@ public class Word implements Value {
     }
     @Override
     public String toString() {
-        return "Word:" + getContent();
+        return getContent();
     }
 }

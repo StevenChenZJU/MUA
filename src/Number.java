@@ -56,7 +56,7 @@ public class Number implements Value {
     }
     @Override
     public String toString() {
-        return "Number:" + getContent();
+        return getContent();
     }
 
     /**

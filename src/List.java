@@ -60,7 +60,7 @@ public class List implements Value {
 
     @Override
     public String toString() {
-        return "List:" + getEmbracedContent();
+        return getEmbracedContent();
     }
 
     /**

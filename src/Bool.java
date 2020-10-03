@@ -54,6 +54,6 @@ public class Bool implements Value {
     }
     @Override
     public String toString() {
-        return "Bool:" + getContent();
+        return getContent();
     }
 }
