@@ -29,22 +29,22 @@ public class List implements Value {
     }
 
     @Override
-    public Value getWord() {
+    public Word getWord() {
         return null;
     }
 
     @Override
-    public Value getBool() {
+    public Bool getBool() {
         return null;
     }
 
     @Override
-    public Value getNumber() {
+    public Number getNumber() {
         return null;
     }
 
     @Override
-    public Value getList() {
+    public List getList() {
         return List.newInstance(content);
     }
 
@@ -58,12 +58,15 @@ public class List implements Value {
         this.content = String.valueOf(content);
     }
 
-    public String getEmbracedContent() {
-        return String.format("[%s]", content);
-    }
-
     @Override
     public String toString() {
         return "List:" + getEmbracedContent();
+    }
+
+    /**
+     * Methods Particular to List
+     */
+    public String getEmbracedContent() {
+        return String.format("[%s]", content);
     }
 }

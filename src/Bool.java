@@ -24,22 +24,22 @@ public class Bool implements Value {
     }
 
     @Override
-    public Value getWord() {
+    public Word getWord() {
         return Word.newInstance(bool);
     }
 
     @Override
-    public Value getBool() {
+    public Bool getBool() {
         return Bool.newInstance(bool);
     }
 
     @Override
-    public Value getNumber() {
+    public Number getNumber() {
         return null;
     }
 
     @Override
-    public Value getList() {
+    public List getList() {
         return null;
     }
 

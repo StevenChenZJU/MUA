@@ -9,13 +9,13 @@ interface Value {
     boolean isBool();
     boolean isNumber();
     boolean isList();
-    Value getWord();
-    Value getBool();
-    Value getNumber();
-    Value getList();
-    String getContent();
-    void setContent(String content);
-    String toString();
+    Word    getWord();
+    Bool    getBool();
+    Number  getNumber();
+    List    getList();
+    String  getContent();
+    void    setContent(String content);
+    String  toString();
 
     public static boolean isValueLiteral (String input) {
         return  listPattern.matcher(input).matches()

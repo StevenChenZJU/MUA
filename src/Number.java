@@ -3,7 +3,13 @@ public class Number implements Value {
     public Number(String number) {
         this.number = number;
     }
+    public Number(Double number) {
+        this.number = String.valueOf(number);
+    }
     public static Number newInstance(String content) {
+        return new Number(content);
+    }
+    public static Number newInstance(Double content) {
         return new Number(content);
     }
     @Override
@@ -23,19 +29,19 @@ public class Number implements Value {
         return false;
     }
     @Override
-    public Value getWord() {
+    public Word getWord() {
         return Word.newInstance(number);
     }
     @Override
-    public Value getBool() {
+    public Bool getBool() {
         return null;
     }
     @Override
-    public Value getNumber() {
+    public Number getNumber() {
         return Number.newInstance(number);
     }
     @Override
-    public Value getList() {
+    public List getList() {
         return null;
     }
 
@@ -51,5 +57,29 @@ public class Number implements Value {
     @Override
     public String toString() {
         return "Number:" + getContent();
+    }
+
+    /**
+     * Methods Particular to Number
+     */
+    public Number add(Number n) {
+        //TODO
+        return null;        
+    }
+    public Number sub(Number n) {
+        //TODO
+        return null;        
+    }
+    public Number mul(Number n) {
+        //TODO
+        return null;        
+    }
+    public Number div(Number n) {
+        //TODO
+        return null;        
+    }
+    public Number mod(Number n) {
+        //TODO
+        return null;            
     }
 }

@@ -40,11 +40,11 @@ public class Word implements Value {
         return false;
     }
     @Override
-    public Value getWord() {
+    public Word getWord() {
         return Word.newInstance(word);
     }
     @Override
-    public Value getBool() {
+    public Bool getBool() {
         if (isBool()) {
             return Bool.newInstance(word);
         } else {
@@ -52,7 +52,7 @@ public class Word implements Value {
         }
     }
     @Override
-    public Value getNumber() {
+    public Number getNumber() {
         if (isNumber()) {
             return Number.newInstance(word);
         } else {
@@ -60,7 +60,7 @@ public class Word implements Value {
         }
     }
     @Override
-    public Value getList() {
+    public List getList() {
         // if (isList()) {
         //     return List.newInstance(word);
         // } else {
