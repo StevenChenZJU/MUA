@@ -1,8 +1,6 @@
 import java.util.Stack;
 
 public class MUAExecutor {
-    public Environment global = new Environment();
-    public Stack<Environment> local_stack = new Stack<Environment>();
     public Value 
     execute (String token, MUAInterpreter in) {
         Value value = null;

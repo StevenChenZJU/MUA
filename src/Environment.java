@@ -1,10 +1,13 @@
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class Environment {
     private static HashMap<String, Value> global;
     private static Stack<HashMap<String, Value>> localStack 
      = new Stack<HashMap<String, Value>>();
+    public static Scanner stdin = new Scanner(System.in);
+    
     private static HashMap<String, Value> getLocalEnv() {
         if (localStack.isEmpty()) {
             return null;
