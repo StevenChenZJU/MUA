@@ -22,4 +22,15 @@ interface Value {
             ||  numberPattern.matcher(input).matches()
             ||  boolPattern.matcher(input).matches();
     }
+    public static Value valueOf (Value v) {
+        if (v.isList()) {
+            return v.getList();
+        } else if(v.isBool()) {
+            return v.getBool();
+        } else if(v.isNumber()) {
+            return v.getNumber();
+        } else {
+            return v.getWord();
+        }
+    }
 }

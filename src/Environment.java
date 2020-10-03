@@ -1,15 +1,63 @@
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Environment {
-    HashMap<Name, Value> env;
-
-    public void binding(Name name, Value value) {
-        env.put(name, value);
+    private static HashMap<String, Value> global;
+    private static Stack<HashMap<String, Value>> localStack 
+     = new Stack<HashMap<String, Value>>();
+    private static HashMap<String, Value> getLocalEnv() {
+        if (localStack.isEmpty()) {
+            return null;
+        } else {
+            return localStack.peek();
+        }
     }
-    public boolean hasName(Name name) {
-        return (env.get(name) != null);
+    public static void binding(String name, Value value) {
+        if (localStack.isEmpty()) {
+            global.put(name, value);
+        } else {
+            getLocalEnv().put(name, value);
+        }
     }
-    public Value getValue(Name name) {
-        return env.get(name);
+    public static void export(String name) {
+        HashMap<String, Value> local = getLocalEnv();
+        if (local != null && local.containsKey(name)) {
+            global.put(name, local.get(name));
+        } 
+    }
+    public static boolean hasLocal(String name) {
+        HashMap<String, Value> local = getLocalEnv();
+        if (local != null && local.containsKey(name)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean hasGlobal(String name) {
+        return global.containsKey(name);
+    }
+    public static Value getLocalValue(String name) {
+        HashMap<String, Value> local = getLocalEnv();
+        if (local != null && local.containsKey(name)) {
+            return local.get(name);
+        } else {
+            return null;
+        }
+    }
+    public static Value getGlobalValue(String name) {
+        if (hasGlobal(name)) {
+            return global.get(name);
+        } else {
+            return null;
+        }
+    }
+    public static Value getValue(String name) {
+        if (hasLocal(name)) {
+            return getLocalValue(name);
+        } else if (hasGlobal(name)) {
+            return getGlobalValue(name);
+        } else {
+            return null;
+        }
     }
 }

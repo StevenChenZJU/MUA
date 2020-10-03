@@ -1,5 +1,3 @@
-import java.util.regex.Pattern;
-
 public class Word implements Value {
     private String word; // not containing "
     public Word(String word) {
