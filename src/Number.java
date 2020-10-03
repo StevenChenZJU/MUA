@@ -1,6 +1,7 @@
-public class Number extends Value {
-    public Number(String content) {
-        super(content);
+public class Number implements Value {
+    private String number;
+    public Number(String number) {
+        this.number = number;
     }
     public static Number newInstance(String content) {
         return new Number(content);
@@ -20,5 +21,31 @@ public class Number extends Value {
     @Override
     public boolean isList() {
         return false;
+    }
+    @Override
+    public Value getWord() {
+        return Word.newInstance(number);
+    }
+    @Override
+    public Value getBool() {
+        return null;
+    }
+    @Override
+    public Value getNumber() {
+        return Number.newInstance(number);
+    }
+    @Override
+    public Value getList() {
+        return null;
+    }
+
+    @Override
+    public String getContent() {
+        return number;
+    }
+
+    @Override
+    public void setContent(String content) {
+        number = content;
     }
 }

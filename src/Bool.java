@@ -1,6 +1,7 @@
-public class Bool extends Value {
-    public Bool(String content) {
-        super(content);
+public class Bool implements Value {
+    private String bool;
+    public Bool(String bool) {
+        this.bool = bool;
     }
     public static Bool newInstance(String content) {
         return new Bool(content);
@@ -20,5 +21,35 @@ public class Bool extends Value {
     @Override
     public boolean isList() {
         return false;
+    }
+
+    @Override
+    public Value getWord() {
+        return Word.newInstance(bool);
+    }
+
+    @Override
+    public Value getBool() {
+        return Bool.newInstance(bool);
+    }
+
+    @Override
+    public Value getNumber() {
+        return null;
+    }
+
+    @Override
+    public Value getList() {
+        return null;
+    }
+
+    @Override
+    public String getContent() {
+        return bool;
+    }
+
+    @Override
+    public void setContent(String content) {
+        bool = content;
     }
 }

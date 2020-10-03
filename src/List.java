@@ -1,6 +1,7 @@
-public class List extends Value {
+public class List implements Value {
+    private String content;
     public List(String content) {
-        super(content);
+        this.content = content;
     }
     public static List newInstance(String content) {
         return new List(content);
@@ -20,5 +21,35 @@ public class List extends Value {
     @Override
     public boolean isList() {
         return true;
+    }
+
+    @Override
+    public Value getWord() {
+        return null;
+    }
+
+    @Override
+    public Value getBool() {
+        return null;
+    }
+
+    @Override
+    public Value getNumber() {
+        return null;
+    }
+
+    @Override
+    public Value getList() {
+        return List.newInstance(content);
+    }
+
+    @Override
+    public String getContent() {
+        return content;
+    }
+
+    @Override
+    public void setContent(String content) {
+        this.content = content;
     }
 }

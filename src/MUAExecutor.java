@@ -11,7 +11,12 @@ public class MUAExecutor {
         // 2. if it has number/bool/list/word pattern, return Operation.VALUE
         // 3. otherwise, check whether it can be a name, if yes, return Operation.NAME
         Operation op = Operation.getOperation(token);
+        // then the Executor evaluate the operation to get arguments
+        // get totally <argNum> values using Executor.execute
+        // each time read in a **token** and execute it
+        Value[] args = eval(op, in);
         // then Executor apply the operation:
+        // TODO: rewrite the comment
         // (1) if an inner operation, first get parameter by:
         //      1. read token, execute it and get returned value
         //      2. check whether the returned value type is correct
@@ -26,7 +31,6 @@ public class MUAExecutor {
         //      2. if in namespace and it binds a value other than list
         //          **or not in the namespace at all**
         //          then ** return it as a word**
-        Value[] args = eval(op, in);
         value = apply(op, token, args);
         return value;
     }
