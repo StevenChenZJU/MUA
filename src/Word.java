@@ -71,11 +71,15 @@ public class Word implements Value {
 
     @Override
     public String getContent() {
-        return word;
+        return String.valueOf(word);
     }
 
     @Override
     public void setContent(String content) {
-        word = content;
+        word = String.valueOf(content);
+    }
+    @Override
+    public String toString() {
+        return "Word:" + getContent();
     }
 }

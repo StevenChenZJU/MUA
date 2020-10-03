@@ -15,6 +15,7 @@ interface Value {
     Value getList();
     String getContent();
     void setContent(String content);
+    String toString();
 
     public static boolean isValueLiteral (String input) {
         return  listPattern.matcher(input).matches()
@@ -31,6 +32,17 @@ interface Value {
             return v.getNumber();
         } else {
             return v.getWord();
+        }
+    }
+    public static Value valueOf (String token) {
+        if (listPattern.matcher(token).matches()) {
+            return List.newInstance(token);
+        } else if(boolPattern.matcher(token).matches()) {
+            return Bool.newInstance(token);
+        } else if(numberPattern.matcher(token).matches()) {
+            return Number.newInstance(token);
+        } else {
+            return Word.newInstance(token);
         }
     }
 }

@@ -41,11 +41,15 @@ public class Number implements Value {
 
     @Override
     public String getContent() {
-        return number;
+        return String.valueOf(number);
     }
 
     @Override
     public void setContent(String content) {
-        number = content;
+        number = String.valueOf(content);
+    }
+    @Override
+    public String toString() {
+        return "Number:" + getContent();
     }
 }

@@ -4,7 +4,12 @@ public class List implements Value {
         this.content = content;
     }
     public static List newInstance(String content) {
-        return new List(content);
+        int length = content.length();
+        if (content.charAt(0) == '[' && content.charAt(length-1) == ']') {
+            return new List(content.substring(1, length-1));
+        } else {
+            return new List(content);
+        }
     }
     @Override
     public boolean isWord() {
@@ -45,11 +50,20 @@ public class List implements Value {
 
     @Override
     public String getContent() {
-        return content;
+        return String.valueOf(content);
     }
 
     @Override
     public void setContent(String content) {
-        this.content = content;
+        this.content = String.valueOf(content);
+    }
+
+    public String getEmbracedContent() {
+        return String.format("[%s]", content);
+    }
+
+    @Override
+    public String toString() {
+        return "List:" + getEmbracedContent();
     }
 }

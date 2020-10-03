@@ -45,11 +45,15 @@ public class Bool implements Value {
 
     @Override
     public String getContent() {
-        return bool;
+        return String.valueOf(bool);
     }
 
     @Override
     public void setContent(String content) {
-        bool = content;
+        bool = String.valueOf(content);
+    }
+    @Override
+    public String toString() {
+        return "Bool:" + getContent();
     }
 }
