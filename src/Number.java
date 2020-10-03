@@ -95,4 +95,18 @@ public class Number implements Value {
         Double result = (double) (longLeft % longRight);
         return Number.newInstance(result);            
     }
+
+    /**
+     * Unit Test
+     */
+    public static void main(String[] args) {
+        Number a = Number.newInstance("26.");
+        Number b = Number.newInstance("5");
+        Number c = Number.newInstance(34.);
+        System.out.println("Add:"+a.add(b));
+        System.out.println("Sub:"+a.sub(b));
+        System.out.println("Mul:"+a.mul(b));
+        System.out.println("Div:"+c.div(b));
+        System.out.println("Mod:"+a.mod(b));
+    }
 }
