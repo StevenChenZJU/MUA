@@ -9,6 +9,9 @@ public class MUAInterpreter {
     public MUAInterpreter (Scanner in) {
         this.in = in;
     }
+    public boolean hasNext() {
+        return in.hasNext();
+    }
     public String nextToken () {
         // get the next complete token
         // especially for token begins with [ and ( 

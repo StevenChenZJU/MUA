@@ -2,9 +2,15 @@ public class Mua {
     public static void main(String[] args) {
         MUAInterpreter interpreter = new MUAInterpreter(Environment.stdin);
         MUAExecutor executor = new MUAExecutor();
+        String token;
+        Value v;
         while (true) {
-            String token = interpreter.nextToken();
-            Value v = executor.execute(token, interpreter);
+            if (interpreter.hasNext()) {
+                token = interpreter.nextToken();
+                v = executor.execute(token, interpreter);
+            } else {
+                break;
+            }
         }
     }
 }

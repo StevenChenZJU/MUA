@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -150,16 +151,16 @@ public enum Operation {
     }
     public static Pattern commaPattern = Pattern.compile(":.+");
     public static Pattern namePattern = Pattern.compile("[a-zA-Z]\\[a-zA-Z0-9_]*");
-    public static Map<String, Operation> opMap
-    = Map.of(
-    "make",     Operation.MAKE,
-    "thing",    Operation.THING,
-    "print",    Operation.PRINT,
-    "read",     Operation.READ,
-    "add",      Operation.ADD,
-    "sub",      Operation.SUB,
-    "mul",      Operation.MUL,
-    "div",      Operation.DIV,
-    "mod",      Operation.MOD
-    );
+    public static Map<String, Operation> opMap = new HashMap<String, Operation>();
+    static {
+        opMap.put("make", Operation.MAKE);
+        opMap.put("thing", Operation.THING);
+        opMap.put("print", Operation.PRINT);
+        opMap.put("read", Operation.READ);
+        opMap.put("add", Operation.ADD);
+        opMap.put("sub", Operation.SUB);
+        opMap.put("mul", Operation.MUL);
+        opMap.put("div", Operation.DIV);
+        opMap.put("mod", Operation.MOD);
+    }
 }
