@@ -200,5 +200,6 @@ public enum Operation {
         opMap.put("mod", Operation.MOD);
         opMap.put("erase", Operation.ERASE);
         opMap.put("isname", Operation.ISNAME);
+        opMap.put("run",Operation.RUN);
     }
 }
