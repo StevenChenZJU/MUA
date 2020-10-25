@@ -6,6 +6,9 @@ public class Bool implements Value {
     public static Bool newInstance(String content) {
         return new Bool(content);
     }
+    public static Bool newInstance(boolean bool) {
+        return Bool.newInstance(bool ? "true" : "false");
+    }
     @Override
     public boolean isWord() {
         return true;

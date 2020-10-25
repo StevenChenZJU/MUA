@@ -125,6 +125,13 @@ public enum Operation {
             Word name = args[0].getWord();
             return Environment.erase(name.getContent());
         }
+    },
+    ISNAME(1){
+        Value exec(String operator, Value[] args){
+            Word possibleName = args[0].getWord();
+            boolean result = namePattern.matcher(possibleName.getContent()).matches();
+            return Bool.newInstance(result);
+        }
     };
     
     private final int argNum;
