@@ -140,19 +140,7 @@ public enum Operation {
         Value exec(String operator, Value[] args){
             List list = args[0].getList();
             String content = list.getContent();
-            MUAInterpreter interpreter = new MUAInterpreter(new Scanner(content));
-            MUAExecutor executor = new MUAExecutor();
-            String token = null;
-            Value result = null;
-            while (true) {
-                if (interpreter.hasNext()) {
-                    token = interpreter.nextToken();
-                    result = executor.execute(token, interpreter);
-                } else {
-                    break;
-                }
-            }
-            return result;
+            return run(content);
         }
     },
     OR(2) {
@@ -260,6 +248,19 @@ public enum Operation {
             }
             return Bool.newInstance(result);
         }
+    },
+    IF(3) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Bool condition = args[0].getBool();
+            List trueStatement = args[1].getList();
+            List falseStatement = args[2].getList();
+            if (condition.isTrue()) {
+                return run(trueStatement.getContent());
+            } else {
+                return run(falseStatement.getContent());
+            }
+        }
     };
     
     private final int argNum;
@@ -293,6 +294,21 @@ public enum Operation {
         }
         return op;
     }
+    private static Value run(String statements) {
+        MUAInterpreter interpreter = new MUAInterpreter(new Scanner(statements));
+        MUAExecutor executor = new MUAExecutor();
+        String token = null;
+        Value result = null;
+        while (true) {
+            if (interpreter.hasNext()) {
+                token = interpreter.nextToken();
+                result = executor.execute(token, interpreter);
+            } else {
+                break;
+            }
+    }
+        return result;
+    }
     public static Pattern commaPattern = Pattern.compile(":.+");
     public static Pattern namePattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     public static Map<String, Operation> opMap = new HashMap<String, Operation>();
@@ -320,5 +336,8 @@ public enum Operation {
         opMap.put("isbool",Operation.ISBOOL);
         opMap.put("islist",Operation.ISLIST);
         opMap.put("isempty",Operation.ISEMPTY);
+        opMap.put("if", Operation.IF);
+        
     }
+
 }
