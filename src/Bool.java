@@ -59,4 +59,19 @@ public class Bool implements Value {
     public String toString() {
         return getContent();
     }
+    /**
+     * Method specific to Bool
+     */
+    boolean isTrue() {
+        return bool.equals("true");
+    }
+    public Bool and(Bool b) {
+        return Bool.newInstance(isTrue() & b.isTrue());
+    }
+    public Bool or(Bool b) {
+        return Bool.newInstance(isTrue() | b.isTrue());
+    }
+    public Bool not() {
+        return Bool.newInstance(!isTrue());
+    }
 }

@@ -82,4 +82,22 @@ public class Word implements Value {
     public String toString() {
         return getContent();
     }
+    /**
+     * Method specific to Word
+     */
+    public boolean greaterThan(Word n) {
+        String left = word;
+        String right = n.getContent();
+        return left.compareTo(right) > 0;
+    }
+    public boolean lessThan(Word n) {
+        String left = word;
+        String right = n.getContent();
+        return left.compareTo(right) < 0;
+    }
+    public boolean equalWith(Word n) {
+        String left = word;
+        String right = n.getContent();
+        return left.equals(right);
+    }
 }

@@ -95,6 +95,21 @@ public class Number implements Value {
         Double result = (double) (longLeft % longRight);
         return Number.newInstance(result);            
     }
+    public boolean greaterThan(Number n) {
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        return left > right;
+    }
+    public boolean lessThan(Number n) {
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        return left < right;
+    }
+    public boolean equalWith(Number n) {
+        Double left = Double.parseDouble(number);
+        Double right = Double.parseDouble(n.getContent());
+        return left.equals(right);
+    }
 
     /**
      * Unit Test

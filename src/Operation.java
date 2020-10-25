@@ -154,6 +154,71 @@ public enum Operation {
             }
             return result;
         }
+    },
+    OR(2) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Bool left = args[0].getBool();
+            Bool right = args[1].getBool();
+            return left.and(right);
+        }
+    },
+    AND(2) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Bool left = args[0].getBool();
+            Bool right = args[1].getBool();
+            return left.or(right);
+        }
+    },
+    NOT(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Bool bool = args[0].getBool();
+            return bool.not();
+        }
+    },
+    LT(2) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value left = args[0];
+            Value right = args[1];
+            boolean result = false;
+            if (left.isNumber() && right.isNumber()) {
+                result = left.getNumber().lessThan(right.getNumber());
+            } else {
+                result = left.getWord().lessThan(right.getWord());
+            }
+            return Bool.newInstance(result);
+        }
+    },
+    GT(2) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value left = args[0];
+            Value right = args[1];
+            boolean result = false;
+            if (left.isNumber() && right.isNumber()) {
+                result = left.getNumber().greaterThan(right.getNumber());
+            } else {
+                result = left.getWord().greaterThan(right.getWord());
+            }
+            return Bool.newInstance(result);
+        }
+    },
+    EQ(2) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value left = args[0];
+            Value right = args[1];
+            boolean result = false;
+            if (left.isNumber() && right.isNumber()) {
+                result = left.getNumber().equalWith(right.getNumber());
+            } else {
+                result = left.getWord().equalWith(right.getWord());
+            }
+            return Bool.newInstance(result);
+        }
     };
     
     private final int argNum;
@@ -201,5 +266,11 @@ public enum Operation {
         opMap.put("erase", Operation.ERASE);
         opMap.put("isname", Operation.ISNAME);
         opMap.put("run",Operation.RUN);
+        opMap.put("or",Operation.OR);
+        opMap.put("and",Operation.AND);
+        opMap.put("not",Operation.NOT);
+        opMap.put("lt",Operation.LT);
+        opMap.put("gt",Operation.GT);
+        opMap.put("eq",Operation.EQ);
     }
 }
