@@ -2,8 +2,8 @@ import java.util.regex.Pattern;
 
 public interface Value {    
     public static Pattern numberPattern = Pattern.compile("-?\\d+\\.?\\d*");
-    public static Pattern wordPattern = Pattern.compile("\".+");
-    public static Pattern listPattern = Pattern.compile("\\[\\s*.+");
+    public static Pattern wordPattern = Pattern.compile("\".*"); // may be empty string
+    public static Pattern listPattern = Pattern.compile("\\[.*"); // .* include the "[" single left 
     public static Pattern boolPattern = Pattern.compile("true|false");
     boolean isWord();
     boolean isBool();

@@ -7,8 +7,8 @@ public class Word implements Value {
         if(!content.isEmpty() && content.charAt(0) != '\"')
             return new Word(content);
         else 
-            // remove the \"
-            return new Word(content.substring(1));
+            // remove the \" or dealing with empty content
+            return new Word(content.isEmpty() ? "" : content.substring(1));
     }
     @Override
     public boolean isWord() {
@@ -99,5 +99,8 @@ public class Word implements Value {
         String left = word;
         String right = n.getContent();
         return left.equals(right);
+    }
+    public boolean isEmpty() {
+        return word.isBlank();
     }
 }

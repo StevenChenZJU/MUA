@@ -219,6 +219,47 @@ public enum Operation {
             }
             return Bool.newInstance(result);
         }
+    },
+    ISNUMBER(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value value = args[0];
+            return Bool.newInstance(value.isNumber());
+        }
+    },
+    ISWORD(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value value = args[0];
+            return Bool.newInstance(value.isWord());
+        }
+    },
+    ISBOOL(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value value = args[0];
+            return Bool.newInstance(value.isBool());
+        }
+    },
+    ISLIST(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value value = args[0];
+            return Bool.newInstance(value.isList());
+        }
+    },
+    ISEMPTY(1) {
+        @Override
+        Value exec(String operator, Value[] args) {
+            Value value = args[0];
+            boolean result = false;
+            if (value.isList()) {
+                result = value.getList().isEmpty();
+            } else if (value.isWord()) {
+                result = value.getWord().isEmpty();
+            }
+            return Bool.newInstance(result);
+        }
     };
     
     private final int argNum;
@@ -247,7 +288,9 @@ public enum Operation {
         } else if(namePattern.matcher(token).matches()){
             //TODO: get the argument in the first sublist
             op = Operation.FUNCTION;
-        } // else UNKNOWN
+        } else {
+            System.out.println("UNKNOWN OP OCCUR! WHICH IS: " + token);
+        }
         return op;
     }
     public static Pattern commaPattern = Pattern.compile(":.+");
@@ -272,5 +315,10 @@ public enum Operation {
         opMap.put("lt",Operation.LT);
         opMap.put("gt",Operation.GT);
         opMap.put("eq",Operation.EQ);
+        opMap.put("isnumber",Operation.ISNUMBER);
+        opMap.put("isword",Operation.ISWORD);
+        opMap.put("isbool",Operation.ISBOOL);
+        opMap.put("islist",Operation.ISLIST);
+        opMap.put("isempty",Operation.ISEMPTY);
     }
 }

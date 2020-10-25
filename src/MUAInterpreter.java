@@ -2,8 +2,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MUAInterpreter {
-    private static Pattern listPattern = Pattern.compile("\\[\\s*.+");
-    private static Pattern exprPattern = Pattern.compile("\\(\\s*.+");
+    private static Pattern listPattern = Pattern.compile("\\[.*");
+    private static Pattern exprPattern = Pattern.compile("\\(\\.*");
 
     private Scanner in = new Scanner("");
     public MUAInterpreter (Scanner in) {

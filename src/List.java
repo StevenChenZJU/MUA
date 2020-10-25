@@ -5,7 +5,7 @@ public class List implements Value {
     }
     public static List newInstance(String content) {
         int length = content.length();
-        if (content.charAt(0) == '[' && content.charAt(length-1) == ']') {
+        if (!content.isEmpty() && content.charAt(0) == '[' && content.charAt(length-1) == ']') {
             return new List(content.substring(1, length-1));
         } else {
             return new List(content);
@@ -68,5 +68,8 @@ public class List implements Value {
      */
     public String getEmbracedContent() {
         return String.format("[%s]", content);
+    }
+    public boolean isEmpty() {
+        return content.isBlank();
     }
 }
