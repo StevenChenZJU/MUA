@@ -17,7 +17,7 @@ public enum Operation {
 		}
     }, 
     // NAME -- interpreted as possible name
-    NAME(0){
+    FUNCTION(0){
 		Value exec(String operator, Value[] args){
             Value value = Environment.getValue(operator);
 			if (value != null && value.isList()) {
@@ -129,8 +129,30 @@ public enum Operation {
     ISNAME(1){
         Value exec(String operator, Value[] args){
             Word possibleName = args[0].getWord();
-            boolean result = namePattern.matcher(possibleName.getContent()).matches();
-            return Bool.newInstance(result);
+            boolean result = namePattern.matcher(
+                possibleName.getContent()
+                ).matches();
+            Value value = Bool.newInstance(result);
+            return value;
+        }
+    },
+    RUN(1){
+        Value exec(String operator, Value[] args){
+            List list = args[0].getList();
+            String content = list.getContent();
+            MUAInterpreter interpreter = new MUAInterpreter(new Scanner(content));
+            MUAExecutor executor = new MUAExecutor();
+            String token = null;
+            Value result = null;
+            while (true) {
+                if (interpreter.hasNext()) {
+                    token = interpreter.nextToken();
+                    result = executor.execute(token, interpreter);
+                } else {
+                    break;
+                }
+            }
+            return result;
         }
     };
     
@@ -158,12 +180,13 @@ public enum Operation {
         } else if(Value.isValueLiteral(token)) {
             op = Operation.VALUE;
         } else if(namePattern.matcher(token).matches()){
-            op = Operation.NAME;
+            //TODO: get the argument in the first sublist
+            op = Operation.FUNCTION;
         } // else UNKNOWN
         return op;
     }
     public static Pattern commaPattern = Pattern.compile(":.+");
-    public static Pattern namePattern = Pattern.compile("[a-zA-Z]\\[a-zA-Z0-9_]*");
+    public static Pattern namePattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     public static Map<String, Operation> opMap = new HashMap<String, Operation>();
     static {
         opMap.put("make", Operation.MAKE);
@@ -176,5 +199,6 @@ public enum Operation {
         opMap.put("div", Operation.DIV);
         opMap.put("mod", Operation.MOD);
         opMap.put("erase", Operation.ERASE);
+        opMap.put("isname", Operation.ISNAME);
     }
 }
