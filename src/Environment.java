@@ -64,4 +64,18 @@ public class Environment {
             return null;
         }
     }
+    public static Value eraseLocal(String name) {
+        HashMap<String, Value> local = getLocalEnv();
+        return local.remove(name);
+    }
+    public static Value eraseGlobal(String name) {
+        return global.remove(name);
+    }
+    public static Value erase(String name) {
+        if (hasLocal(name)) {
+            return eraseLocal(name);
+        } else {
+            return eraseGlobal(name);
+        }
+    }
 }

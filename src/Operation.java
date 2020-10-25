@@ -119,7 +119,13 @@ public enum Operation {
                 return null;
             }
 		}
-	};
+    },
+    ERASE(1){
+        Value exec(String operator, Value[] args){
+            Word name = args[0].getWord();
+            return Environment.erase(name.getContent());
+        }
+    };
     
     private final int argNum;
 
@@ -162,5 +168,6 @@ public enum Operation {
         opMap.put("mul", Operation.MUL);
         opMap.put("div", Operation.DIV);
         opMap.put("mod", Operation.MOD);
+        opMap.put("erase", Operation.ERASE);
     }
 }
