@@ -61,6 +61,7 @@ public class Environment {
         } else if (hasGlobal(name)) {
             return getGlobalValue(name);
         } else {
+            System.out.println("CANNOT FIND: " + name);
             return null;
         }
     }

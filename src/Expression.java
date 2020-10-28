@@ -36,9 +36,7 @@ public class Expression {
                 
                 i = content.length() - 1;
             }
-            else if ((content.charAt(i) == '-'  && 
-                (content.charAt(i-1) == ')' || 
-                PureExpression.isDigit(content.charAt(i-1))))) {
+            else if (isOperatorSub(content, i)) {
                 // operator -
                 String left = getLeftOperand(content, i);
                 String right = getRightOperand(content, i);
@@ -82,6 +80,22 @@ public class Expression {
         // remove all ()
         
         return content.replaceAll("\\(|\\)", " ");
+    }
+
+    private static boolean isOperatorSub(String content, int index) {
+        boolean result = false;
+        if (content.charAt(index) == '-'  && 
+            (content.charAt(index-1) == ')')) {
+            result = true;
+        }
+        else if (content.charAt(index) == '-'  &&
+            PureExpression.isDigit(content.charAt(index-1))) {
+            result = true;
+        } else if (content.charAt(index) == '-'  &&
+            Pattern.matches("[a-zA-z_]", content.substring(index-1, index))) {
+            result = true;
+        }
+        return result;
     }
 
     private static String getRightOperand(String content, int i) {
