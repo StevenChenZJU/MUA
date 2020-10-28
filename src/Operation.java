@@ -7,6 +7,7 @@ public enum Operation {
     // ERROR TYPE
     UNKNOWN(0){
 		Value exec(String operator, Value[] args){
+            System.out.println("EXEC UNKNOWN!");
 			return null;
 		}
     }, 
@@ -31,6 +32,17 @@ public enum Operation {
             }
 		}
     }, 
+    // EXPRESSION ()
+    EXPRESSION(0) {
+		@Override
+		Value exec(String operator, Value[] args) {
+            // the whole expression will be in operator
+            String content = operator.substring(1, operator.length()).trim();
+            Expression expression = Expression.newInstance(content);
+            Value value = expression.eval();
+		    return value;
+		}
+    },    
     // MAKE -- 
     MAKE(2){
 		Value exec(String operator, Value[] args){
@@ -289,12 +301,14 @@ public enum Operation {
         } else if(namePattern.matcher(token).matches()){
             //TODO: get the argument in the first sublist
             op = Operation.FUNCTION;
+        } else if (!token.isEmpty() && token.charAt(0) == '(') {
+            op = Operation.EXPRESSION;
         } else {
             System.out.println("UNKNOWN OP OCCUR! WHICH IS: " + token);
         }
         return op;
     }
-    private static Value run(String statements) {
+    public static Value run(String statements) {
         MUAInterpreter interpreter = new MUAInterpreter(new Scanner(statements));
         MUAExecutor executor = new MUAExecutor();
         String token = null;
@@ -306,7 +320,7 @@ public enum Operation {
             } else {
                 break;
             }
-    }
+        }
         return result;
     }
     public static Pattern commaPattern = Pattern.compile(":.+");

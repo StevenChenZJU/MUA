@@ -3,7 +3,7 @@ import java.util.regex.Pattern;
 
 public class MUAInterpreter {
     private static Pattern listPattern = Pattern.compile("\\[.*");
-    private static Pattern exprPattern = Pattern.compile("\\(\\.*");
+    private static Pattern exprPattern = Pattern.compile("\\(.*");
 
     private Scanner in = new Scanner("");
     public MUAInterpreter (Scanner in) {
@@ -52,8 +52,9 @@ public class MUAInterpreter {
         int leftMinusRight = 1; // the number of [ minus the number of ]
         while (leftMinusRight > 0) {
             // if off the result's length, read more
-            if(index >= result.length())
+            if(index >= result.length()) {
                 result = String.format("%s %s", result, in.next());
+            }
             leftMinusRight += (result.charAt(index) == '(') ? 1 : 0;
             leftMinusRight -= (result.charAt(index) == ')') ? 1 : 0;
             index++;
@@ -64,7 +65,7 @@ public class MUAInterpreter {
 
     // Unit Test 
     public static void main (String[] args) {
-        String input = "hello 2344 \"sdfe (2+3 / thing \"a + 9) [print \"you[sucks aloha ba 134245] [[[you]]]";
+        String input = "hello 2344 \"sdfe (2 + 3 / thing \"a + 9) [print \"you[sucks aloha ba 134245] [[[you]]]";
         Scanner in = new Scanner(input);
         MUAInterpreter interpreter = new MUAInterpreter(in);
         while (in.hasNext()) {
