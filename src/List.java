@@ -70,6 +70,6 @@ public class List implements Value {
         return String.format("[%s]", content);
     }
     public boolean isEmpty() {
-        return content.isBlank();
+        return content.trim().isEmpty();
     }
 }

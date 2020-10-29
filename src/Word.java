@@ -101,6 +101,6 @@ public class Word implements Value {
         return left.equals(right);
     }
     public boolean isEmpty() {
-        return word.isBlank();
+        return word.trim().isEmpty();
     }
 }
