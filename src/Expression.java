@@ -133,7 +133,7 @@ public class Expression {
     }
 
     public static class PureExpression {
-        static Stack<Integer> operands = new Stack<Integer>();
+        static Stack<Double> operands = new Stack<Double>();
         static Stack<Calculation> operations = new Stack<Calculation>();
         static boolean indicator = false; // indicate we need an operand
         static Pattern op_pattern = Pattern.compile("\\(|\\)|\\+|\\*|/|%|-");
@@ -155,7 +155,7 @@ public class Expression {
                         else {
                             // is negative sign
                             index++;
-                            operands.push(-Integer.valueOf(input.substring(index, index+1)));
+                            operands.push(-Double.valueOf(input.substring(index, index+1)));
                         }
                         
                         break;
@@ -166,14 +166,14 @@ public class Expression {
                     default: // number
                     {
                         if(index != 0 && isDigit(input.charAt(index-1))) {
-                            Integer prev = operands.pop();
+                            Double prev = operands.pop();
                             prev = prev * 10 + Integer.valueOf(input.substring(index, index+1));
                             
                             operands.push(prev);
                         } else {
-                            Integer integer = Integer.valueOf(input.substring(index, index+1));
+                            Double d = Double.valueOf(input.substring(index, index+1));
                             
-                            operands.push(integer);
+                            operands.push(d);
                         }
                     }
                 }
@@ -186,40 +186,40 @@ public class Expression {
             PLUS(1, 1) {
                 @Override
                 void eval() {
-                    Integer operand1 = operands.pop();
-                    Integer operand2 = operands.pop();
+                    Double operand1 = operands.pop();
+                    Double operand2 = operands.pop();
                     operands.push(operand2 + operand1);
                 }
             }, 
             MINUS(1, 1) {
                 @Override
                 void eval() {
-                    Integer operand1 = operands.pop();
-                    Integer operand2 = operands.pop();
+                    Double operand1 = operands.pop();
+                    Double operand2 = operands.pop();
                     operands.push(operand2 - operand1);
                 }
             }, 
             MUL(2, 2) {
                 @Override
                 void eval() {
-                    Integer operand1 = operands.pop();
-                    Integer operand2 = operands.pop();
+                    Double operand1 = operands.pop();
+                    Double operand2 = operands.pop();
                     operands.push(operand2 * operand1);
                 }
             }, 
             DIV(2, 2) {
                 @Override
                 void eval() {
-                    Integer operand1 = operands.pop();
-                    Integer operand2 = operands.pop();
+                    Double operand1 = operands.pop();
+                    Double operand2 = operands.pop();
                     operands.push(operand2 / operand1);
                 }
             },
             MOD(2, 2) {
                 @Override
                 void eval() {
-                    Integer operand1 = operands.pop();
-                    Integer operand2 = operands.pop();
+                    Double operand1 = operands.pop();
+                    Double operand2 = operands.pop();
                     operands.push(operand2 % operand1);
                 }
             }, 
@@ -273,6 +273,7 @@ public class Expression {
     public static void main(String[] args) {
         String[] arr = {
             "(5%3-3*3/(5+4))",
+            "(2+3*3/5+4)",
             "(10+-2*3-6)",
             "(add (5%3-3*3/(5+4)) 5)",
             "(2*(-2+6)/4)"
