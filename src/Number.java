@@ -14,7 +14,7 @@ public class Number implements Value {
     }
     @Override
     public boolean isWord() {
-        return true;
+        return false;
     }
     @Override
     public boolean isBool() {
