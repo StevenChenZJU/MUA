@@ -37,7 +37,7 @@ public enum Operation {
 		@Override
 		Value exec(String operator, Value[] args) {
             // the whole expression will be in operator
-            String content = operator.substring(1, operator.length()).trim();
+            String content = operator.substring(1, operator.length()-1).trim();
             Expression expression = Expression.newInstance(content);
             Value value = expression.eval();
 		    return value;

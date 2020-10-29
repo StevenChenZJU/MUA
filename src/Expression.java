@@ -14,6 +14,7 @@ public class Expression {
 
 	public Value eval() {
         if (pureExpPattern.matcher(content).matches()) {
+            // System.out.println("Pure Expression: " + content);
             return PureExpression.eval(content);
         } else {
             // contains postfix expression or mua statements
@@ -274,7 +275,7 @@ public class Expression {
             "(5%3-3*3/(5+4))",
             "(10+-2*3-6)",
             "(add (5%3-3*3/(5+4)) 5)",
-            "(:a+:b*:c)"
+            "(2*(-2+6)/4)"
         };
         for (String str : arr) {
             Expression expr = Expression.newInstance(str);

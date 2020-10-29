@@ -33,12 +33,14 @@ public class MUAInterpreter {
         while (leftMinusRight > 0) {
             // if off the result's length, read more
             if (index >= result.length()) {
-                while ((token = in.next()).charAt(0) == '\"') {
-                    // concatenate
-                    result = String.format("%s %s", result, token);
-                    index = result.length();
-                }
-                result = String.format("%s %s", result, token);
+                // TODO: [print "A]
+                // while ((token = in.next()).charAt(0) == '\"') {
+                //     // concatenate
+                //     result = String.format("%s %s", result, token);
+                //     index = result.length();
+                // }
+                // result = String.format("%s %s", result, token);
+                result = String.format("%s %s", result, in.next());
             }
             leftMinusRight += (result.charAt(index) == '[') ? 1 : 0;
             leftMinusRight -= (result.charAt(index) == ']') ? 1 : 0;
@@ -65,7 +67,7 @@ public class MUAInterpreter {
 
     // Unit Test 
     public static void main (String[] args) {
-        String input = "hello 2344 \"sdfe (2 + 3 / thing \"a + 9) [print \"you[sucks aloha ba 134245] [[[you]]]";
+        String input = "hello 2344 \"sdfe (2 + 3 / thing \"a + 9) [print \"you[sucks ] aloha ba 134245] [[[you]]]";
         Scanner in = new Scanner(input);
         MUAInterpreter interpreter = new MUAInterpreter(in);
         while (in.hasNext()) {
