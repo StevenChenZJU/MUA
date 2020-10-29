@@ -159,7 +159,7 @@ public enum Operation {
         Value exec(String operator, Value[] args) {
             Bool left = args[0].getBool();
             Bool right = args[1].getBool();
-            return left.and(right);
+            return left.or(right);
         }
     },
     AND(2) {
