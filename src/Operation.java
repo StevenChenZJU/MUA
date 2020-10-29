@@ -141,9 +141,8 @@ public enum Operation {
     ISNAME(1){
         Value exec(String operator, Value[] args){
             Word possibleName = args[0].getWord();
-            boolean result = namePattern.matcher(
-                possibleName.getContent()
-                ).matches();
+            boolean result = Environment.hasLocal(possibleName.getContent()) 
+                            | Environment.hasGlobal(possibleName.getContent());
             Value value = Bool.newInstance(result);
             return value;
         }
