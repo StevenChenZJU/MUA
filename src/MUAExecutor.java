@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 public class MUAExecutor {
     public Value 
     execute (String token, MUAInterpreter in) {
@@ -12,23 +10,15 @@ public class MUAExecutor {
         // then the Executor evaluate the operation to get arguments
         // get totally <argNum> values using Executor.execute
         // each time read in a **token** and execute it
-        Value[] args = eval(op, in);
+        Value[] args = null; 
         // then Executor apply the operation:
         // TODO: rewrite the comment
-        // (1) if an inner operation, first get parameter by:
-        //      1. read token, execute it and get returned value
-        //      2. check whether the returned value type is correct
-        //    then **execute the operation** using lambda expression predefined
-        // (2) if an Operation.VALUE type, ask the interpreter 
-        //      to get the complete value by using in.nextValue()
-        //      and return the Value directly
-        // (3) if an **possible** name, check whether in namespace
-        //      1. if in namespace and it binds a **list**,
-        //          which means it **should be** a function call(but not definitely)
-        //          then do what (1) do
-        //      2. if in namespace and it binds a value other than list
-        //          **or not in the namespace at all**
-        //          then ** return it as a word**
+        if (op == Operation.FUNCTION) {
+            // get function arguments
+            args = eval(op, token, in);
+        } else {
+            args = eval(op, in);
+        }
         value = apply(op, token, args);
         return value;
     }
@@ -44,6 +34,35 @@ public class MUAExecutor {
             result[i] = value;
         }
         return result;
+    }
+    private Value[]
+    eval(Operation op, String token, MUAInterpreter in) {
+        // for function
+        if (op != Operation.FUNCTION) {
+            // TODO: Exception
+            return null;
+        } else {
+            Value function = Environment.getValue(token);
+            if (!function.isList()) {
+                // TODO: exception
+                return null;
+            }
+            List functionDefinition = function.getList();
+            List params = functionDefinition.first().getList();
+            // List functionBody = functionDefinition.last().getList();
+            String[] tokens = params.getTokens();
+            int argNum = tokens.length;
+            Value[] result = new Value[argNum];
+            String arg;
+            Value value;
+            for (int i = 0; i < argNum; i++) {
+                arg = in.nextToken();
+                value = execute(arg, in);
+                result[i] = value;
+            }
+            return result;
+        }
+        
     }
     private Value 
     apply (Operation op, String token, Value[] args) {

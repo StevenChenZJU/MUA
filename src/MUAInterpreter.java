@@ -33,14 +33,14 @@ public class MUAInterpreter {
         while (leftMinusRight > 0) {
             // if off the result's length, read more
             if (index >= result.length()) {
-                // TODO: [print "A]
                 // while ((token = in.next()).charAt(0) == '\"') {
                 //     // concatenate
                 //     result = String.format("%s %s", result, token);
                 //     index = result.length();
                 // }
                 // result = String.format("%s %s", result, token);
-                result = String.format("%s %s", result, in.next());
+                String nextString = in.next();
+                result = String.format("%s %s", result, nextString);
             }
             leftMinusRight += (result.charAt(index) == '[') ? 1 : 0;
             leftMinusRight -= (result.charAt(index) == ']') ? 1 : 0;

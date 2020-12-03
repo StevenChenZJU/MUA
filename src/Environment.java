@@ -9,6 +9,12 @@ public class Environment {
      = new Stack<HashMap<String, Value>>();
     public static Scanner stdin = new Scanner(System.in);
     
+    public static void pushLocalFrame(HashMap<String, Value> localFrame) {
+        localStack.push(localFrame);
+    }
+    public static HashMap<String, Value> popLocalFrame() {
+        return localStack.pop();
+    }
     private static HashMap<String, Value> getLocalEnv() {
         if (localStack.isEmpty()) {
             return null;

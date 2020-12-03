@@ -6,28 +6,41 @@ import java.util.regex.Pattern;
 public enum Operation {
     // ERROR TYPE
     UNKNOWN(0){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             System.out.println("EXEC UNKNOWN!");
 			return null;
 		}
     }, 
     // VALUE -- return value
     VALUE(0){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
 			return Value.valueOf(operator);
 		}
     }, 
     // NAME -- interpreted as possible name
     FUNCTION(0){
-		Value exec(String operator, Value[] args){
-            Value value = Environment.getValue(operator);
-			if (value != null && value.isList()) {
-                // Execute the Function binded with the name
-                Scanner scanner = new Scanner(value.getContent());
-                MUAInterpreter in = new MUAInterpreter(scanner);
-                //TODO: function call
-                return null;
+		public Value exec(String operator, Value[] args){
+            Value function = Environment.getValue(operator);
+			if (function != null && function.isList()) {
+                // 0. get the first list and second list, seperate the first list
+                List functionDefinition = function.getList();
+                List params = functionDefinition.first().getList();
+                List functionBody = functionDefinition.last().getList();
+                String[] tokens = params.getTokens(); // with the length with args
+                // 1. create local frame, bind the local variable
+                HashMap<String, Value> frame = new HashMap<String, Value>();
+                for (int i = 0; i < args.length; i++) {
+                    String name = tokens[i];
+                    Value value = args[i];
+                    frame.put(name, value);
+                }
+                Environment.pushLocalFrame(frame);
+                // 2. execute the list
+                Value returnValue = run(functionBody.getContent());
+                // 3. return value
+                return returnValue;
             } else {
+                // Exception
                 return null;
             }
 		}
@@ -35,7 +48,7 @@ public enum Operation {
     // EXPRESSION ()
     EXPRESSION(0) {
 		@Override
-		Value exec(String operator, Value[] args) {
+		public Value exec(String operator, Value[] args) {
             // the whole expression will be in operator
             String content = operator.substring(1, operator.length()-1).trim();
             Expression expression = Expression.newInstance(content);
@@ -45,7 +58,7 @@ public enum Operation {
     },    
     // MAKE -- 
     MAKE(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             String name = args[0].getContent();
             Value value = args[1];
             Environment.binding(name, value);
@@ -53,32 +66,32 @@ public enum Operation {
 		}
 	},
     THING(1){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             String name = args[0].getContent();
             return Environment.getValue(name);
 		}
 	},
     COMMA(0){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             String name = operator.substring(1);
             return Environment.getValue(name);
 		}
 	},
     PRINT(1){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Value value = args[0];
             System.out.println(value);
             return value;
 		}
 	},
     READ(0){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             String token = Environment.stdin.next();
             return Value.valueOf(token);
 		}
 	},
     ADD(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Number left = args[0].getNumber();
             Number right = args[1].getNumber();
             if (left != null && right != null) {
@@ -89,7 +102,7 @@ public enum Operation {
 		}
 	},
     SUB(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Number left = args[0].getNumber();
             Number right = args[1].getNumber();
             if (left != null && right != null) {
@@ -100,7 +113,7 @@ public enum Operation {
 		}
 	},
     MUL(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Number left = args[0].getNumber();
             Number right = args[1].getNumber();
             if (left != null && right != null) {
@@ -111,7 +124,7 @@ public enum Operation {
 		}
 	},
     DIV(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Number left = args[0].getNumber();
             Number right = args[1].getNumber();
             if (left != null && right != null) {
@@ -122,7 +135,7 @@ public enum Operation {
 		}
 	},
     MOD(2){
-		Value exec(String operator, Value[] args){
+		public Value exec(String operator, Value[] args){
             Number left = args[0].getNumber();
             Number right = args[1].getNumber();
             if (left != null && right != null) {
@@ -133,13 +146,13 @@ public enum Operation {
 		}
     },
     ERASE(1){
-        Value exec(String operator, Value[] args){
+        public Value exec(String operator, Value[] args){
             Word name = args[0].getWord();
             return Environment.erase(name.getContent());
         }
     },
     ISNAME(1){
-        Value exec(String operator, Value[] args){
+        public Value exec(String operator, Value[] args){
             Word possibleName = args[0].getWord();
             boolean result = Environment.hasLocal(possibleName.getContent()) 
                             | Environment.hasGlobal(possibleName.getContent());
@@ -148,7 +161,7 @@ public enum Operation {
         }
     },
     RUN(1){
-        Value exec(String operator, Value[] args){
+        public Value exec(String operator, Value[] args){
             List list = args[0].getList();
             String content = list.getContent();
             return run(content);
@@ -156,7 +169,7 @@ public enum Operation {
     },
     OR(2) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Bool left = args[0].getBool();
             Bool right = args[1].getBool();
             return left.or(right);
@@ -164,7 +177,7 @@ public enum Operation {
     },
     AND(2) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Bool left = args[0].getBool();
             Bool right = args[1].getBool();
             return left.or(right);
@@ -172,14 +185,14 @@ public enum Operation {
     },
     NOT(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Bool bool = args[0].getBool();
             return bool.not();
         }
     },
     LT(2) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value left = args[0];
             Value right = args[1];
             boolean result = false;
@@ -193,7 +206,7 @@ public enum Operation {
     },
     GT(2) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value left = args[0];
             Value right = args[1];
             boolean result = false;
@@ -207,7 +220,7 @@ public enum Operation {
     },
     EQ(2) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value left = args[0];
             Value right = args[1];
             boolean result = false;
@@ -221,35 +234,35 @@ public enum Operation {
     },
     ISNUMBER(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value value = args[0];
             return Bool.newInstance(value.isNumber());
         }
     },
     ISWORD(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value value = args[0];
             return Bool.newInstance(value.isWord());
         }
     },
     ISBOOL(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value value = args[0];
             return Bool.newInstance(value.isBool());
         }
     },
     ISLIST(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value value = args[0];
             return Bool.newInstance(value.isList());
         }
     },
     ISEMPTY(1) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Value value = args[0];
             boolean result = false;
             if (value.isList()) {
@@ -262,7 +275,7 @@ public enum Operation {
     },
     IF(3) {
         @Override
-        Value exec(String operator, Value[] args) {
+        public Value exec(String operator, Value[] args) {
             Bool condition = args[0].getBool();
             List trueStatement = args[1].getList();
             List falseStatement = args[2].getList();
@@ -272,6 +285,24 @@ public enum Operation {
                 return run(falseStatement.getContent());
             }
         }
+    },
+    RETURN(1) {
+
+        @Override
+        public Value exec(String operator, Value[] args) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+    },
+    EXPORT(1) {
+
+        @Override
+        public Value exec(String operator, Value[] args) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     };
     
     private final int argNum;
@@ -282,7 +313,7 @@ public enum Operation {
     public int getArgNum() {
         return argNum;
     }
-    abstract Value exec(String operator, Value[] args);
+    abstract public Value exec(String operator, Value[] args);
     /**
      * Static Functions and Variables
      */
@@ -298,7 +329,6 @@ public enum Operation {
         } else if(Value.isValueLiteral(token)) {
             op = Operation.VALUE;
         } else if(namePattern.matcher(token).matches()){
-            //TODO: get the argument in the first sublist
             op = Operation.FUNCTION;
         } else if (!token.isEmpty() && token.charAt(0) == '(') {
             op = Operation.EXPRESSION;
