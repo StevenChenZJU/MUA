@@ -9,6 +9,9 @@ public class MUAInterpreter {
     public MUAInterpreter (Scanner in) {
         this.in = in;
     }
+    public void clearUp() {
+        in = new Scanner(""); // clear up all input
+    }
     public boolean hasNext() {
         return in.hasNext();
     }

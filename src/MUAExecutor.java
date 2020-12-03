@@ -19,6 +19,12 @@ public class MUAExecutor {
         } else {
             args = eval(op, in);
         }
+        if (op == Operation.RETURN) {
+            // if RETURN operation, clear up interpreter
+            // so that the function return instead of 
+            // continue to execute
+            in.clearUp();
+        }
         value = apply(op, token, args);
         return value;
     }

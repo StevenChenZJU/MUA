@@ -289,27 +289,32 @@ public enum Operation {
         }
     },
     RETURN(1) {
-
         @Override
         public Value exec(String operator, Value[] args) {
-            // Value name = args[0];
-            // Value returnValue = Environment.getValue(name.getContent());
-            // if (returnValue == null) {
-            //     //TODO: exception
-            //     return null;
-            // } else {
-            //     // 
-            // }
-            return null;
+            Value returnValue = args[0];
+            if (returnValue == null) {
+                //TODO: exception
+                return null;
+            } else {
+                // return the value
+                // and this statement is the last statement
+                // so the value will be returned as the return value of functions
+                return returnValue;
+            }
         }
-
     },
     EXPORT(1) {
 
         @Override
         public Value exec(String operator, Value[] args) {
-            // TODO Auto-generated method stub
-            return null;
+            Value name = args[0];
+            if (Environment.hasLocal(name.getContent())) {
+                Environment.export(name.getContent());
+                return Environment.getValue(name.getContent());
+            } else {
+                //TODO: exception
+                return null;   
+            }
         }
 
     };
@@ -389,7 +394,8 @@ public enum Operation {
         opMap.put("islist",Operation.ISLIST);
         opMap.put("isempty",Operation.ISEMPTY);
         opMap.put("if", Operation.IF);
-        
+        opMap.put("return", Operation.RETURN);
+        opMap.put("export", Operation.EXPORT);
     }
 
 }
