@@ -37,7 +37,9 @@ public enum Operation {
                 Environment.pushLocalFrame(frame);
                 // 2. execute the list
                 Value returnValue = run(functionBody.getContent());
-                // 3. return value
+                // 3. pop out the frame 
+                Environment.popLocalFrame();
+                // 4. return value
                 return returnValue;
             } else {
                 // Exception
@@ -290,7 +292,14 @@ public enum Operation {
 
         @Override
         public Value exec(String operator, Value[] args) {
-            // TODO Auto-generated method stub
+            // Value name = args[0];
+            // Value returnValue = Environment.getValue(name.getContent());
+            // if (returnValue == null) {
+            //     //TODO: exception
+            //     return null;
+            // } else {
+            //     // 
+            // }
             return null;
         }
 
