@@ -1,14 +1,24 @@
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
 
 public class Environment {
+    
     private static HashMap<String, Value> global
      = new HashMap<String, Value>();
     private static Stack<HashMap<String, Value>> localStack 
      = new Stack<HashMap<String, Value>>();
     public static Scanner stdin = new Scanner(System.in);
     
+    static {
+        global.put("pi", Value.valueOf("3.14159"));
+    }
+
     public static void pushLocalFrame(HashMap<String, Value> localFrame) {
         localStack.push(localFrame);
     }
@@ -83,6 +93,44 @@ public class Environment {
             return eraseLocal(name);
         } else {
             return eraseGlobal(name);
+        }
+    }
+    public static void save(String fname) {
+        HashMap<String, Value> namespace = null;
+        if (localStack.isEmpty()) {
+            namespace = global;
+        } else {
+            namespace = localStack.peek();
+        }
+        Set<String> keySet = namespace.keySet();
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname)));
+            for (String key : keySet) {
+                writer.write(String.format("make \"%s %s\n", key, namespace.get(key).toString()));
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Cannot find file: " + fname);
+            e.printStackTrace();
+        }
+    }
+    public static void eraseAll() {
+        if (!localStack.isEmpty()) {
+            localStack.peek().clear();
+        } else {
+            global.clear();
+        }
+    }
+    public static void postAll() {
+        HashMap<String, Value> namespace = null;
+        if (localStack.isEmpty()) {
+            namespace = global;
+        } else {
+            namespace = localStack.peek();
+        }
+        Set<String> keySet = namespace.keySet();
+        for (String key : keySet) {
+            System.out.println(String.format("%s = %s", key, namespace.get(key).toString()));
         }
     }
 }

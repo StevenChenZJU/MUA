@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class List implements Value {
     private String content;
-    private String[] tokens = null;
+    private ArrayList<String> tokens = null;
     public List(String content) {
         this.content = content;
     }
@@ -76,13 +76,13 @@ public class List implements Value {
     public boolean isEmpty() {
         return content.trim().isEmpty();
     }
-    public String[] getTokens() {
+    public ArrayList<String> getTokens() {
         MUAInterpreter interpreter = new MUAInterpreter(new Scanner(content));
         ArrayList<String> list = new ArrayList<String>();
         while (interpreter.hasNext()) {
             list.add(interpreter.nextToken());
         }
-        return list.toArray(new String[0]);
+        return list;
     }
     private static List tokensToList(String[] arr, int first, int last) {
         // from arr[first] to arr[last](included)
@@ -102,8 +102,8 @@ public class List implements Value {
         if (tokens == null) {
             tokens = getTokens();
         } 
-        if (tokens.length != 0)
-            return Value.valueOf(tokens[0]);
+        if (tokens.size() != 0)
+            return Value.valueOf(tokens.get(0));
         else {
             // TODO: exception
             return null;
@@ -113,8 +113,8 @@ public class List implements Value {
         if (tokens == null) {
             tokens = getTokens();
         } 
-        if (tokens.length != 0)
-            return Value.valueOf(tokens[tokens.length-1]);
+        if (tokens.size() != 0)
+            return Value.valueOf(tokens.get(tokens.size()-1));
         else {
             // TODO: exception
             return null;
@@ -124,26 +124,33 @@ public class List implements Value {
         if (tokens == null) {
             tokens = getTokens();
         } 
-        if (tokens.length == 0) {
+        if (tokens.size() == 0) {
             //TODO: exception
             return null;
-        } else if (tokens.length == 1) {
+        } else if (tokens.size() == 1) {
             return List.newInstance("[]");
         } else {
-            return tokensToList(tokens, 1, tokens.length-1);
+            return tokensToList(tokens.toArray(new String[0]), 1, tokens.size()-1);
         }
     }
     public List butLast() {
         if (tokens == null) {
             tokens = getTokens();
         } 
-        if (tokens.length == 0) {
+        if (tokens.size() == 0) {
             //TODO: exception
             return null;
-        } else if (tokens.length == 1) {
+        } else if (tokens.size() == 1) {
             return List.newInstance("[]");
         } else {
-            return tokensToList(tokens, 0, tokens.length-2);
+            return tokensToList(tokens.toArray(new String[0]), 0, tokens.size()-2);
         }
+    }
+    // 
+    public List join(String s) {
+        if (tokens == null) {
+            tokens = getTokens();
+        } 
+        return List.newInstance(String.format("[ %s %s ]", content, s));
     }
 }

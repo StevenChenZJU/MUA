@@ -13,9 +13,14 @@ public class MUAExecutor {
         Value[] args = null; 
         // then Executor apply the operation:
         // TODO: rewrite the comment
+        // Special case: FUNCTION, READLIST and RETURN
         if (op == Operation.FUNCTION) {
             // get function arguments
             args = eval(op, token, in);
+        } else if (op == Operation.READLIST) {
+            String listString = "[ " + in.nextLine() + " ]";
+            List list = List.newInstance(listString);
+            args = new Value[]{list};
         } else {
             args = eval(op, in);
         }
@@ -56,7 +61,7 @@ public class MUAExecutor {
             List functionDefinition = function.getList();
             List params = functionDefinition.first().getList();
             // List functionBody = functionDefinition.last().getList();
-            String[] tokens = params.getTokens();
+            String[] tokens = params.getTokens().toArray(new String[0]);
             int argNum = tokens.length;
             Value[] result = new Value[argNum];
             String arg;

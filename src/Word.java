@@ -103,4 +103,16 @@ public class Word implements Value {
     public boolean isEmpty() {
         return word.trim().isEmpty();
     }
+    public Word first() {
+        return Word.newInstance(word.substring(0,1));
+    }
+    public Word last() {
+        return Word.newInstance(word.substring(word.length()-1,word.length()));
+    }
+    public Word butFirst() {
+        return Word.newInstance(word.substring(1));
+    }
+    public Word butLast() {
+        return Word.newInstance(word.substring(0,word.length()-1));
+    }
 }

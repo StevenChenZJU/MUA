@@ -15,6 +15,9 @@ public class MUAInterpreter {
     public boolean hasNext() {
         return in.hasNext();
     }
+    public String nextLine() {
+        return in.nextLine();
+    }
     public String nextToken () {
         // get the next complete token
         // especially for token begins with [ and ( 
