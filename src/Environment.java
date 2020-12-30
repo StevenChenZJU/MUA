@@ -106,7 +106,10 @@ public class Environment {
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname)));
             for (String key : keySet) {
-                writer.write(String.format("make \"%s %s\n", key, namespace.get(key).toString()));
+                String str = namespace.get(key).toString();
+                if (namespace.get(key).isBool() || namespace.get(key).isWord())
+                    str = "\"" + str;
+                writer.write(String.format("make \"%s %s\n", key, str));
             }
             writer.close();
         } catch (IOException e) {

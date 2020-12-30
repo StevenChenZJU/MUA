@@ -34,7 +34,7 @@ public class List implements Value {
 
     @Override
     public Word getWord() {
-        return null;
+        return Word.newInstance(getEmbracedContent());
     }
 
     @Override
@@ -54,7 +54,7 @@ public class List implements Value {
 
     @Override
     public String getContent() {
-        return String.valueOf(content);
+        return String.valueOf(content).replaceAll("\\s+", " ").trim();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class List implements Value {
         StringBuffer buff = new StringBuffer("[ ");
         for (int i = first; i <= last; i++) {
             String str = arr[i];
-            buff.append(str);
+            buff.append(str + " ");
         }
         buff.append(" ]");
         return List.newInstance(buff.toString());
